@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,13 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+$pages = File::allFiles(app_path('Http/Controllers/Pages'));
+foreach ($pages as $page) {
+    if ($page->isFile()) {
+        $uri = str_replace('Controller.php', '', str_replace('\\', '/', $page->getRelativePathname()));
+        $nameSpace = str_replace( '/', '\\', 'App\Http\Controllers\Pages\\' . $uri);
+        Route::get(str_replace('/-', '/', Str::kebab($uri)), $nameSpace . 'Controller@index');
+    }
+}

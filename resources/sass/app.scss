@@ -1,8 +1,7 @@
-// Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
+// Import icon libraries
+@import '@quasar/extras/material-icons/material-icons.css';
+@import '@quasar/extras/material-icons-outlined/material-icons-outlined.css';
+@import '@quasar/extras/themify/themify.css';
 
-// Variables
-@import 'variables';
-
-// Bootstrap
-@import 'bootstrap/scss/bootstrap';
+// Import Quasar css
+@import 'quasar/src/css/index.sass';

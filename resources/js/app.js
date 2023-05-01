@@ -5,16 +5,12 @@
  */
 
 import './bootstrap';
-import { createApp } from 'vue';
-import { Quasar } from 'quasar'
-
-// Import icon libraries
-import '@quasar/extras/material-icons/material-icons.css'
-import '@quasar/extras/material-icons-outlined/material-icons-outlined.css'
-import '@quasar/extras/themify/themify.css'
-
-// Import Quasar css
-import 'quasar/src/css/index.sass'
+import {
+    createApp
+} from 'vue';
+import {
+    Quasar
+} from 'quasar'
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -25,13 +21,8 @@ import 'quasar/src/css/index.sass'
 const app = createApp({});
 
 // use plugins
-app.use(Quasar, {
-    plugins: {}
-})
+app.use(Quasar)
 
-
-import ExampleComponent from './components/ExampleComponent.vue';
-app.component('example-component', ExampleComponent);
 
 /**
  * The following block of code may be used to automatically register your
@@ -40,10 +31,20 @@ app.component('example-component', ExampleComponent);
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
+Object.entries(
+    import.meta.glob('./vue-html/**/*.vue', {
+        eager: true
+    })).forEach(([path, definition]) => {
+    app.component(path.split('/').pop().replace(/\.\w+$/, ''), definition.default);
+});
 
-// Object.entries(import.meta.glob('./**/*.vue', { eager: true })).forEach(([path, definition]) => {
-//     app.component(path.split('/').pop().replace(/\.\w+$/, ''), definition.default);
-// });
+/**
+ * Import all components to vue
+ */
+import * as QuasarComponents from 'quasar';
+Object.keys(QuasarComponents).forEach((name) => {
+    app.component(name, QuasarComponents[name]);
+});
 
 /**
  * Finally, we will attach the application instance to a HTML element with
