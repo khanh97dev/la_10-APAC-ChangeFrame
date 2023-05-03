@@ -26,16 +26,20 @@
             class="bg-grey-2"
         >
             <q-list>
-                <q-item-label header v-text="props.menuHeader"></q-item-label>
+                <q-item-label
+                    header
+                    v-text="props.menuHeader"
+                ></q-item-label>
                 <q-item
                     v-for="(item, index) in props.menu"
                     clickable
+                    :active="item.active"
                     :target="item.target"
                     :href="item.href"
                     :key="index"
                 >
                     <q-item-section avatar>
-                        <q-icon :name="item.icon" />
+                        <q-icon :name="item.icon" gloss="AB" />
                     </q-item-section>
                     <q-item-section>
                         <q-item-label v-text="item.label" />
@@ -50,15 +54,22 @@
         </q-drawer>
 
         <q-page-container>
-            <slot/>
+            <slot @emitPagination="emitPagination" />
         </q-page-container>
     </q-layout>
 </template>
 
 <script>
     import {
-        ref
+        inject,
+        ref,
+        watch
     } from 'vue'
+
+    import {
+        Cookies
+    } from 'quasar'
+
 
     export default {
         name: 'MainLayout',
@@ -76,15 +87,21 @@
         },
 
         setup(props) {
-            const leftDrawerOpen = ref(false)
-            function toggleLeftDrawer() {
+            const leftDrawerOpen = ref(
+                Cookies.get('leftDrawerOpen') === 'false' ? false : true
+            )
+
+            const toggleLeftDrawer = () => {
                 leftDrawerOpen.value = !leftDrawerOpen.value
             }
 
-            return {
-                leftDrawerOpen,
+            watch(leftDrawerOpen, (newV, oldV) => {
+                Cookies.set('leftDrawerOpen', leftDrawerOpen.value)
+            })
 
+            return {
                 toggleLeftDrawer,
+                leftDrawerOpen,
                 props
             }
         },

@@ -47,9 +47,19 @@ Object.keys(QuasarComponents).forEach((name) => {
 });
 
 /**
+ * globalProperties function to define a set of global methods or properties that can be accessed from anywhere in your application.
+ */
+app.config.globalProperties.$cProperty = {
+    passWindow(key, param) {
+        if (window[key]) {
+            window[key](param)
+        }
+    }
+}
+
+/**
  * Finally, we will attach the application instance to a HTML element with
  * an "id" attribute of "app". This element is included with the "auth"
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
-
 app.mount('#app');

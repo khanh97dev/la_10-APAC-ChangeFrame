@@ -1,12 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\File;
+$a = [
+    [
+        'href' => '/example',
+        'label' => 'Example',
+        'icon' => 'example',
+        'caption' => 'examle for datatable',
+        'active' => false
+    ]
+];
 
-$pages = File::allFiles(app_path('Http/Controllers/Pages'));
-foreach ($pages as $page) {
-    if ($page->isFile()) {
-        $path = str_replace('Controller.php', '', str_replace('\\', '/', $page->getRelativePathname()));
-        $nameSpace = str_replace( '/', '\\', 'App\Http\Controllers\Pages\\' . $path);
-        Route::get(Str::kebab($uri), $nameSpace . 'Controller@index');
-    }
+foreach ($a as $key => $item) {
+    dump($key, $item);
 }
