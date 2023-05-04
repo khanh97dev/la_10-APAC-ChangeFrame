@@ -43,7 +43,7 @@ foreach ($pages as $page) {
             Route::put($uri . '/update/{id}', $className . '@update');
         }
         if (method_exists($className, 'delete')) {
-            Route::get($uri . '/delete/{id}', $className . '@delete');
+            Route::delete($uri . '/delete/{id}', $className . '@delete');
         }
         Route::get($uri, $className . '@index');
     }
