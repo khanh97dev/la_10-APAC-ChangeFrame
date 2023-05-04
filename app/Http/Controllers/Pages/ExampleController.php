@@ -18,6 +18,14 @@ class ExampleController extends Controller
         ]);
     }
 
+    public function edit($id)
+    {
+        return view('pages.example.edit', [
+            'id' => $id,
+            'data' => Food::find($id)
+        ]);
+    }
+
     private function getData()
     {
         $page = (int)request()->input(K_PAGE, V_PAGE);

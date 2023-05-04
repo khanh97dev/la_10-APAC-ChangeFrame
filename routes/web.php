@@ -21,8 +21,30 @@ Route::get('/', function () {
 $pages = File::allFiles(app_path('Http/Controllers/Pages'));
 foreach ($pages as $page) {
     if ($page->isFile()) {
-        $uri = str_replace('Controller.php', '', str_replace('\\', '/', $page->getRelativePathname()));
-        $nameSpace = str_replace( '/', '\\', 'App\Http\Controllers\Pages\\' . $uri);
-        Route::get(str_replace('/-', '/', Str::kebab($uri)), $nameSpace . 'Controller@index');
+        $path = str_replace('Controller.php', '', str_replace('\\', '/', $page->getRelativePathname()));
+        $uri = str_replace('/-', '/', Str::kebab($path));
+        $className = str_replace('/', '\\', 'App\Http\Controllers\Pages\\' . $path) . 'Controller';
+
+        // CRUD page
+        if (method_exists($className, 'add')) {
+            Route::get($uri . '/add', $className . '@add');
+        }
+        if (method_exists($className, 'show')) {
+            Route::get($uri . '/show/{id}', $className . '@show');
+        }
+        if (method_exists($className, 'edit')) {
+            Route::get($uri . '/edit/{id}', $className . '@edit');
+        }
+        // CRUD API
+        if (method_exists($className, 'create')) {
+            Route::post($uri . '/create', $className . '@create');
+        }
+        if (method_exists($className, 'update')) {
+            Route::put($uri . '/update/{id}', $className . '@update');
+        }
+        if (method_exists($className, 'delete')) {
+            Route::get($uri . '/delete/{id}', $className . '@delete');
+        }
+        Route::get($uri, $className . '@index');
     }
 }

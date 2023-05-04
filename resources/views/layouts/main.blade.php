@@ -35,6 +35,7 @@
         <main-layout
             menu-header="{{ \App\Models\Menu::getHeader() }}"
             :menu="{{ json_encode(\App\Models\Menu::getData()) }}"
+            v-model="formData"
         >
             @yield('content')
         </main-layout>

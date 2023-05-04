@@ -15,23 +15,7 @@
             sortBy: '{{ request(K_SORT_BY, K_SORT_BY) }}'
         }"
     >
-        <template v-slot:body-cell-actions="props">
-            <q-tr :props="props">
-                <q-td
-                    key="actions"
-                    :props="props"
-                >
-                    <q-btn
-                        icon="mode_edit"
-                        @click="() => $cProperty.passWindow('example_updateRow', props.row)"
-                    ></q-btn>
-                    <q-btn
-                        icon="delete"
-                        @click="() => $cProperty.passWindow('example_deleteRow', props.row)"
-                    ></q-btn>
-                </q-td>
-            </q-tr>
-        </template>
+        @yield('slot')
     </q-table>
 </div>
 @endsection

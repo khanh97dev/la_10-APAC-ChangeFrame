@@ -54,7 +54,7 @@
         </q-drawer>
 
         <q-page-container>
-            <slot @emitPagination="emitPagination" />
+            <slot :value="value"/>
         </q-page-container>
     </q-layout>
 </template>
@@ -83,10 +83,16 @@
             },
             menuHeader: {
                 type: String
-            }
+            },
+            value: {
+                type: String,
+                default: '',
+            },
         },
 
         setup(props) {
+            const input1 = ref('123')
+
             const leftDrawerOpen = ref(
                 Cookies.get('leftDrawerOpen') === 'false' ? false : true
             )
@@ -100,6 +106,7 @@
             })
 
             return {
+                input1,
                 toggleLeftDrawer,
                 leftDrawerOpen,
                 props
