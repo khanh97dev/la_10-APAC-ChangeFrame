@@ -1,10 +1,10 @@
 @extends('layouts.main')
-@section('title', 'Example:' . $id)
+@section('title', 'Farame Add')
 
 @section('content')
-
+<div class="row">
+</div>
 @endsection
 
-@include('helper-js')
 <script>
 </script>

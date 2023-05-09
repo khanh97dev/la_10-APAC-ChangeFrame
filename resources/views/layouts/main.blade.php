@@ -16,30 +16,14 @@
 
     <title>@yield('title', config('app.name', 'Laravel'))</title>
 
-    <!-- Fonts -->
-    <link
-        rel="dns-prefetch"
-        href="//fonts.gstatic.com"
-    >
-    <link
-        href="https://fonts.bunny.net/css?family=Nunito"
-        rel="stylesheet"
-    >
-
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
 <body>
-    <div id="app">
-        <main-layout
-            menu-header="{{ \App\Models\Menu::getHeader() }}"
-            :menu="{{ json_encode(\App\Models\Menu::getData()) }}"
-            v-model="formData"
-        >
-            @yield('content')
-        </main-layout>
+    <div class="container-fluid pt-4">
+        @yield('content')
     </div>
+    @include('helper-js')
 </body>
-
 </html>
