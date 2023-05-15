@@ -1,25 +1,24 @@
 <script>
-    function toKebabCase(str) {
-        return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-    }
 
-    function getCurrentURL() {
-        return new URL(window.location.href);
-    }
 
-    function updatePagination(pagination) {
-        let url = new URL(window.location.href);
-        let params = new URLSearchParams(url.search);
-
-        for(key in pagination) {
-            const keyQuery = toKebabCase(key);
-            const inRequestTable = @json(IN_REQUEST_TABLE);
-            if (inRequestTable.includes(keyQuery)) {
-                params.set(toKebabCase(keyQuery), pagination[key]);
-            }
+    function handleDelete(event) {
+        const target = event.target;
+        if (confirm(target.getAttribute('data-message-to-delete'))) {
+            fetch(target.getAttribute('data-href'), {
+                    method: 'DELETE',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-Token": '{{ csrf_token() }}'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status) {
+                        location.reload();
+                    }
+                });
         }
-
-        url.search = params.toString();
-        window.history.replaceState({}, '', url.href);
     }
 </script>

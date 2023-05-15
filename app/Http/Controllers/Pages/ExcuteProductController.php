@@ -9,6 +9,6 @@ class ExcuteProductController extends Controller
 {
     public function index()
     {
-        return view('pages.excute-product')
+        return view('pages.excute-product');
     }
 }

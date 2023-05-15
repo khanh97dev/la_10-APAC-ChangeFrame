@@ -54,9 +54,9 @@
                         class="btn btn-success"
                     >Execute</a>
                     <a
-                        data-href="{{ url()->current() }}/delete/{{ $item->id }}"
                         class="btn btn-warning"
-                        data-message="You want delete for {{ $item->username }}"
+                        data-href="{{ url()->current() }}/delete/{{ $item->id }}"
+                        data-message-to-delete="You want delete for: '{{ $item->username }}'"
                         onclick="return handleDelete(event);"
                     >Delete</a>
                 </div>
@@ -68,24 +68,4 @@
 @endsection
 
 <script>
-    function handleDelete(event) {
-        const target = event.target;
-        if (confirm(target.getAttribute('data-message'))) {
-            fetch(target.getAttribute('data-href'), {
-                    method: 'DELETE',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "X-Requested-With": "XMLHttpRequest",
-                        "X-CSRF-Token": '{{ csrf_token() }}'
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if(data.status) {
-                        location.reload();
-                    }
-                });
-        }
-    }
 </script>

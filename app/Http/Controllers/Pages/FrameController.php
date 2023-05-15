@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Models\Frame;
-use Illuminate\Http\Request;
+use App\Http\Requests\FrameRequest as Request;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class FrameController extends Controller
 {
@@ -15,7 +16,7 @@ class FrameController extends Controller
         return Frame::with('image')->get();
     }
 
-    private function uploadImage(Request $request) : Image
+    private function uploadImage(Request $request): Image
     {
         // Save Image to Storage
         $file = $request->file('image');
@@ -43,30 +44,50 @@ class FrameController extends Controller
         return view('pages.frame-add');
     }
 
+    /**
+     * CRUD
+     * create frame
+     */
     public function create(Request $request)
     {
         // upload image
         $image = $this->uploadImage($request);
         $request->merge(['image_id' => $image->id]);
         // Save Frame to DB
-        Frame::create($request->except('image'));
+        $create = Frame::create($request->except('image'));
+        return response([
+            'status' => $create,
+        ]);
     }
 
+    /**
+     * CRUD
+     * update frame
+     */
     public function update($id, Request $request)
     {
+        $validateData = $request->validated();
         if ($request->input('has_update_image')) {
             $image = $this->uploadImage($request);
             $request->merge(['image_id' => $image->id]);
         }
         // Save Frame to DB
-        Frame::find($id)
+        $update = Frame::find($id)
             ->update($request->except([
                 'image',
                 'has_update_image'
             ]));
+        return response([
+            'status' => $update,
+            'valid' => $validateData
+        ]);
     }
 
-    public function delete($id)
+    /**
+     * CRUD
+     * delete frame
+     */
+    public function delete(Request $request, $id)
     {
         $status = Frame::find($id)->delete();
         return response([

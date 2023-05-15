@@ -1,9 +1,7 @@
-@extends('layouts.main')
-@section('title', 'Farame Add')
+@extends('layouts.form')
+@section('title', 'Add - Frame')
 
-@section('content')
-
-<div class="d-flex justify-content-center">
+@section('form')
     <form
         action="/frame/create"
         method="POST"
@@ -21,6 +19,7 @@
                 type="text"
                 class="form-control"
                 name="username"
+                value="{{ old('username') }}"
             >
         </div>
         <div class="input-group mb-3">
@@ -30,6 +29,7 @@
                     class="custom-file-input"
                     name="image"
                     onchange="previewImage(event);"
+                    value="{{ old('image') }}"
                 >
                 <hr>
                 <div class="d-flex justify-content-center">
@@ -44,15 +44,4 @@
             value="Add"
         />
     </form>
-</div>
-
 @endsection
-
-<script>
-
-    function previewImage(event)
-    {
-        const [file] = event.target.files
-        preview_image.src = URL.createObjectURL(file)
-    }
-</script>
