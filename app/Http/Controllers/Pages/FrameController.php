@@ -19,9 +19,9 @@ class FrameController extends Controller
     {
         // Save Image to Storage
         $file = $request->file('image');
-        $fileName   = time() . '.' . $file->getClientOriginalExtension();
+        $fileName   = $file->getFilename() . '_' . time() . '.' . $file->getClientOriginalExtension();
         $path = 'frames/' . $fileName;
-        Storage::disk(Image::DISK)->put($path, $file);
+        Storage::disk(Image::DISK)->put($path, file_get_contents($file));
         // Save Image to DB
         $image = Image::create([
             'key' => 'frame',
@@ -45,6 +45,7 @@ class FrameController extends Controller
 
     public function create(Request $request)
     {
+        // upload image
         $image = $this->uploadImage($request);
         $request->merge(['image_id' => $image->id]);
         // Save Frame to DB

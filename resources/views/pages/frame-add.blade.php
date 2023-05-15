@@ -5,9 +5,11 @@
 
 <div class="d-flex justify-content-center">
     <form
-        action="{{ url()->current() }}/create"
-        method="create"
+        action="/frame/create"
+        method="POST"
+        enctype="multipart/form-data"
     >
+        @csrf
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span

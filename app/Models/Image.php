@@ -12,6 +12,7 @@ class Image extends Model
     const DISK = 'images';
 
     protected $table = 'image';
+    protected $guarded = ['_token'];
 
     public static function exampleData(): array
     {

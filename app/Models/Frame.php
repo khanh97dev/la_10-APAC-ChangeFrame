@@ -11,6 +11,7 @@ class Frame extends Model
     use HasFactory;
 
     protected $table = 'frame';
+    protected $guarded = ['_token'];
 
     public static function exampleData(): array
     {
