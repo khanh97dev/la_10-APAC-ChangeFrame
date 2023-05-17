@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pages;
 use App\Models\Frame;
 use App\Http\Requests\FrameRequest as Request;
 use App\Http\Controllers\Controller;
+use App\Http\Responses\MainResponse;
 use App\Models\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -55,8 +56,8 @@ class FrameController extends Controller
         $request->merge(['image_id' => $image->id]);
         // Save Frame to DB
         $create = Frame::create($request->except('image'));
-        return response([
-            'status' => $create,
+        return MainResponse::response($request, [
+            'data' => $create
         ]);
     }
 
@@ -77,9 +78,8 @@ class FrameController extends Controller
                 'image',
                 'has_update_image'
             ]));
-        return response([
-            'status' => $update,
-            'valid' => $validateData
+        return MainResponse::response($request, [
+            'data' => $update
         ]);
     }
 
