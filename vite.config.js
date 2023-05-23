@@ -8,7 +8,8 @@ import {
     transformAssetUrls
 } from '@quasar/vite-plugin'
 
-
+const dotenv = require('dotenv');
+dotenv.config();
 
 export default defineConfig({
     plugins: [
@@ -34,9 +35,9 @@ export default defineConfig({
         },
     },
     server: {
-        host: '0.0.0.0',
+        host: process.env.VITE_HOST,
         hmr: {
-            host: '127.0.0.1',
+            host: process.env.IP_HOST,
         },
       }
 });
