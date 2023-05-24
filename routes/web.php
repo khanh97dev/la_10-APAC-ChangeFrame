@@ -18,33 +18,43 @@ Route::get('/', function () {
     return view('home');
 });
 
-$pages = File::allFiles(app_path('Http/Controllers/Pages'));
-foreach ($pages as $page) {
-    if ($page->isFile()) {
-        $path = str_replace('Controller.php', '', str_replace('\\', '/', $page->getRelativePathname()));
-        $uri = str_replace('/-', '/', Str::kebab($path));
-        $className = str_replace('/', '\\', 'App\Http\Controllers\Pages\\' . $path) . 'Controller';
+function autoGenerateCRUD()
+{
+    $pages = File::allFiles(app_path('Http/Controllers/Pages'));
+    foreach ($pages as $page) {
+        if ($page->isFile()) {
+            $path = str_replace('Controller.php', '', str_replace('\\', '/', $page->getRelativePathname()));
+            $uri = str_replace('/-', '/', Str::kebab($path));
+            $className = str_replace('/', '\\', 'App\Http\Controllers\Pages\\' . $path) . 'Controller';
 
-        // CRUD page
-        if (method_exists($className, 'add')) {
-            Route::get($uri . '/add', $className . '@add');
+            // CRUD page
+            if (method_exists($className, 'add')) {
+                Route::get($uri . '/add', $className . '@add');
+            }
+            if (method_exists($className, 'show')) {
+                Route::get($uri . '/show/{id}', $className . '@show');
+            }
+            if (method_exists($className, 'edit')) {
+                Route::get($uri . '/edit/{id}', $className . '@edit');
+            }
+            // CRUD API
+            if (method_exists($className, 'create')) {
+                Route::post($uri . '/create', $className . '@create');
+            }
+            if (method_exists($className, 'update')) {
+                Route::put($uri . '/update/{id}', $className . '@update');
+            }
+            if (method_exists($className, 'delete')) {
+                Route::delete($uri . '/delete/{id}', $className . '@delete');
+            }
+            Route::get($uri, $className . '@index');
         }
-        if (method_exists($className, 'show')) {
-            Route::get($uri . '/show/{id}', $className . '@show');
-        }
-        if (method_exists($className, 'edit')) {
-            Route::get($uri . '/edit/{id}', $className . '@edit');
-        }
-        // CRUD API
-        if (method_exists($className, 'create')) {
-            Route::post($uri . '/create', $className . '@create');
-        }
-        if (method_exists($className, 'update')) {
-            Route::put($uri . '/update/{id}', $className . '@update');
-        }
-        if (method_exists($className, 'delete')) {
-            Route::delete($uri . '/delete/{id}', $className . '@delete');
-        }
-        Route::get($uri, $className . '@index');
     }
 }
+
+autoGenerateCRUD();
+
+// custom function
+Route::middleware(['web'])->group(function () {
+    Route::get('/excute/{username}/{frameImage}', '\App\Http\Controllers\Pages\ExcuteProductController@excute')->name('func.excute_product');
+});
