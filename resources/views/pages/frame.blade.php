@@ -50,7 +50,7 @@
                         class="btn btn-info"
                     >Edit</a>
                     <a
-                        href="/excute/{{ $item->username }}/{{ basename($item->image->src) }}"
+                        href="/excute/{{ $item->username }}"
                         class="btn btn-success"
                     >Execute</a>
                     <a

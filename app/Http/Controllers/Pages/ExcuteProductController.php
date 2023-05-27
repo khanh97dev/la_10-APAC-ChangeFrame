@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Pages;
 
+use App\Models\Frame;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Image as ModelsImage;
-use Intervention\Image\ImageManagerStatic as Image;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
 class ExcuteProductController extends Controller
 {
-    private function hanldeMergedImage(string $username, string $frameImage)
+    private function hanldeMergedImage(string $username, string $fileImageName)
     {
         // Make directory for excute username
         $folderUsername = Storage::disk(ModelsImage::DISK)->path("/merge/$username");
@@ -21,7 +22,7 @@ class ExcuteProductController extends Controller
 
         // Load the username image you want to merge
         $files = Storage::disk(ModelsImage::DISK)->files('products');
-        $imageFrame = Image::make(Storage::disk(ModelsImage::DISK)->get("frames/$frameImage"));
+        $imageFrame = Image::make(Storage::disk(ModelsImage::DISK)->get("frames/$fileImageName"));
 
         // Config size for frame
         $marginWidth = 15;
@@ -54,9 +55,10 @@ class ExcuteProductController extends Controller
     /**
      * Method: GET
      */
-    public function excute(Request $request, $username, $frameImage)
+    public function excute(Request $request, $username)
     {
-        $this->hanldeMergedImage($username, $frameImage);
+        $frame = Frame::whereUsername($username)->first();
+        $this->hanldeMergedImage($username, basename($frame->image->src));
         return $this->index()->with([
             'images' => Storage::disk(ModelsImage::DISK)->files('merge/' . $username)
         ]);

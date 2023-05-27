@@ -56,5 +56,5 @@ autoGenerateCRUD();
 
 // custom function
 Route::middleware(['web'])->group(function () {
-    Route::get('/excute/{username}/{frameImage}', '\App\Http\Controllers\Pages\ExcuteProductController@excute')->name('func.excute_product');
+    Route::get('/excute/{username}', '\App\Http\Controllers\Pages\ExcuteProductController@excute')->name('func.excute_product');
 });

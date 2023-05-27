@@ -27,7 +27,7 @@ class FrameRequest extends MainRequest
         }
         if ($this->isUpdate()) {
             return [
-                'username'         => 'required|max:255',
+                'username'         => 'required|unique|max:255',
                 'image'            => 'file|mimes:jpeg,png|max:2048',
                 'has_update_image' => 'required|boolean',
             ];
