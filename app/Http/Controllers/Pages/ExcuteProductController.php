@@ -30,15 +30,18 @@ class ExcuteProductController extends Controller
         $x = 0;
         $y = $marginHeight - 90;
         foreach ($files as $file) {
-            $imageProduct = Image::make(
-                Storage::disk(ModelsImage::DISK)->get('products/' . basename($file))
-            );
+            $imageFile = Storage::disk(ModelsImage::DISK)->get('products/' . basename($file));
+            $imageInfo = @getimagesize($imageFile);
+            if ($imageInfo === false) {
+                break;
+            }
+            $imageTemp = Image::make($imageFile);
             // Get the dimensions of the second image
-            $imageProductWidth = $imageProduct->getWidth();
-            $imageProductHeight = $imageProduct->getHeight();
+            $imageProductWidth = $imageTemp->getWidth();
+            $imageProductHeight = $imageTemp->getHeight();
             $imageFrame->resize($imageProductWidth + $marginWidth, $imageProductHeight + $marginHeight);
             // Merge the images by placing the second image in the middle of the first image
-            $imageFrame->insert($imageProduct, 'center', (int) $x, (int) $y);
+            $imageFrame->insert($imageTemp, 'center', (int) $x, (int) $y);
             // Save the merged image
             $mergedImagePath = $folderUsername . '/' . basename($file);
             $imageFrame->save($mergedImagePath);

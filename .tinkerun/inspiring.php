@@ -1,30 +1,45 @@
 <?php
 
 use Intervention\Image\ImageManagerStatic as Image;
+
+function isColumnEmpty($image, $columnIndex)
+{
+    for ($y = 0; $y < $image->height(); $y++) {
+        $pixelColor = $image->pickColor($columnIndex, $y, 'array');
+        if ($pixelColor[0] !== 255 || $pixelColor[1] !== 255 || $pixelColor[2] !== 255) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function isRowEmpty($image, $rowIndex)
+{
+    for ($x = 0; $x < $image->width(); $x++) {
+        $pixelColor = $image->pickColor($x, $rowIndex, 'array');
+        if ($pixelColor[0] !== 255 || $pixelColor[1] !== 255 || $pixelColor[2] !== 255) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Load the two images you want to merge
-$image1 = Image::make(storage_path('app/public/images/frames/ip_supply.png'));
-$image2 = Image::make(storage_path('app/public/images/products/s-l300 (28)_copy.jpg'));
+$image = Image::make(storage_path('app/public/images/products/s-l300 (11)_rm.jpg'));
 
-$marginWidth = 15;
-$marginHeight = 100;
-$x = 0;
-$y = $marginHeight - 90;
+// Get the dimensions of the image
+$width = $image->width();
+$height = $image->height();
 
-// Get the dimensions of the second image
-$image2Width = $image2->getWidth();
-$image2Height = $image2->getHeight();
-$image1->resize($image2Width + $marginWidth, $image2Height + $marginHeight);
+// Calculate the coordinates for cropping
+$left = 0; // left coordinate of the cropping area
+$top = 0; // top coordinate of the cropping area
+$right = $width; // right coordinate of the cropping area
+$bottom = $height; // bottom coordinate of the cropping area
 
+// Perform the cropping operation
+$image->crop($right - $left, $bottom - $top, $left, $top);
 
-// Get the dimensions of the first image
-$image1Width = $image1->getWidth();
-$image1Height = $image1->getHeight();
-
-
-
-// Merge the images by placing the second image in the middle of the first image
-$image1->insert($image2, 'center', (int) $x, (int) $y);
-
-// Save the merged image
-$mergedImagePath = storage_path('app/public/images/excutes/merged_image.jpg');
-$image1->save($mergedImagePath);
+// Save the cropped image
+// $image->save('path/to/cropped_image.jpg');
+$image->save(public_path('images/cropped.jpg'));

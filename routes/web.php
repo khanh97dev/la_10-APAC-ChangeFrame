@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', 'App\Http\Controllers\HomeController@index');
 
 function autoGenerateCRUD()
 {
@@ -53,7 +51,6 @@ function autoGenerateCRUD()
 }
 
 autoGenerateCRUD();
-
 // custom function
 Route::middleware(['web'])->group(function () {
     Route::get('/excute/{username}', '\App\Http\Controllers\Pages\ExcuteProductController@excute')->name('func.excute_product');
